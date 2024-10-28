@@ -26,9 +26,12 @@ class TaskResource extends Resource
                 Forms\Components\TextInput::make('task')->required()->maxLength(255),
                 Forms\Components\TextInput::make('comment'),
                 Forms\Components\TextInput::make('external_id')->maxLength(30),
-                Forms\Components\TextInput::make('start_task')->required(),
-                Forms\Components\DatePicker::make('hours')->required(),
-                Forms\Components\Select::make('user_id')->relationship('user','name')->searchable()->preload()->required(),
+                Forms\Components\DatePicker::make('start_task')->required(),
+                Forms\Components\TextInput::make('hours')->required(),
+
+                Forms\Components\TextInput::make('user_id')->required(),
+                
+                //Forms\Components\Select::make('user_id')->relationship('user','name')->searchable()->preload()->required(),
             ]);
     }
 

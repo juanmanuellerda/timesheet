@@ -19,7 +19,8 @@ return new class extends Migration
             $table->timestamp('start_task');
             $table->text('hours');
             //$table->timestamp('finish_task');
-            $table->timestamp('user_id');
+            $table->text('user_id')->nulable();
+            $table->timestamps();
         });
     }
 

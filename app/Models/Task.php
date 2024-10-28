@@ -13,7 +13,7 @@ class Task extends Model
     use HasFactory;
 
     public function users(): HasMany {
-        return $this->hasMany(user::class);
+        return $this->hasMany(User::class);
     } 
     
 

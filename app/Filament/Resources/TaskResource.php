@@ -24,7 +24,7 @@ class TaskResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('task')->required()->maxLength(255),
-                Forms\Components\TextInput::make('comment'),
+                Forms\Components\TextInput::make('comment')->required()->columnSpanFull('full'),
                 Forms\Components\TextInput::make('external_id')->maxLength(30),
                 Forms\Components\DatePicker::make('start_task')->required(),
                 Forms\Components\TextInput::make('hours')->required(),
@@ -39,7 +39,13 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('task'),
+                Tables\Columns\TextColumn::make('comment'),
+                Tables\Columns\TextColumn::make('externa_id')->searchable(),
+                Tables\Columns\TextColumn::make('start_task'),
+                Tables\Columns\TextColumn::make('hours'),
+
+                Tables\Columns\TextColumn::make('user_id')->searchable(),
             ])
             ->filters([
                 //

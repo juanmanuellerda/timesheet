@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('task');
             $table->text('comment')->nulable();
-            $table->text('external_id');
+            $table->string('external_id');
             $table->timestamp('start_task');
             $table->text('hours');
-            //$table->timestamp('finish_task');
-            $table->text('user_id')->nulable();
+            
+            $table->unsignedBigInteger('user_id')->nulable();
+            //$table->foreign('user_id')->references('id')->on('user');
             $table->timestamps();
         });
     }

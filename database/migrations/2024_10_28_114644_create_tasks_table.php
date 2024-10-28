@@ -13,15 +13,13 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
-            $table->text('external_id');
             $table->string('task');
             $table->text('comment')->nulable();
-            //$table->text('external_id');
-            //$table->tipo fecha ('tart_task');
-            //$table->tipo fecha ('job_time');
-            
-            //$table->tipo fecha ('finish_task');
+            $table->text('external_id');
+            $table->timestamp('start_task');
+            $table->text('hours');
+            //$table->timestamp('finish_task');
+            $table->timestamp('user_id');
         });
     }
 

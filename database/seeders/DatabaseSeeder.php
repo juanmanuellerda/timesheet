@@ -21,17 +21,18 @@ class DatabaseSeeder extends Seeder
         $user->email ='juanmanuellerda@gmail.com';
         $user->type = 'guest';
         $user->password = bcrypt('25692569');
+        //$user->task_id = '0';
 
         $user->save();
 
         $task = new Task();
 
-        $task->task = 'hacer un gestor de tareas';
+        $task->name = 'hacer un gestor de tareas';
         $task->comment = 'como dijo medina';
         $task->external_id = "TecZARA_01";
-        $task->start_task = '28/10/24'; 
-        $task->hours = '35';
-        $task->user_id = '5';
+        $task->date = '28/10/24'; 
+        $task->duration = '35';
+        // $task->user_id = '0';
 
         $task->save();
     }       

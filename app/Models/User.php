@@ -9,21 +9,24 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
+
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-
-    public function tasks(): HasMany {
-        return $this->hasMany(Task::class);
+    
+    public function tasks(): BelongsToMany {
+        return $this->belongsToMany(Task::class);
+        //return $this->belongsToMany('App\Models\Task');
     } 
-
-
+    
+        
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array<int, string> 
      */
     protected $fillable = [
         'name',
@@ -53,4 +56,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
 }

@@ -17,21 +17,26 @@ class TaskResource extends Resource
 {
     protected static ?string $model = Task::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box-arrow-down';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('task')->required()->maxLength(255),
+                Forms\Components\TextInput::make('name')->required()->maxLength(255),
                 Forms\Components\TextInput::make('comment')->required()->columnSpanFull('full'),
                 Forms\Components\TextInput::make('external_id')->maxLength(30),
-                Forms\Components\DatePicker::make('start_task')->required(),
-                Forms\Components\TextInput::make('hours')->required(),
+                Forms\Components\DatePicker::make('date')->required(),
+                Forms\Components\TextInput::make('duration')->required(),
 
-                Forms\Components\TextInput::make('user_id')->required(),
+                //Forms\Components\TextInput::make('user_id')->required(),
                 
-                //Forms\Components\Select::make('user_id')->relationship('user','name')->searchable()->preload()->required(),
+                Forms\Components\Select::make('users')
+                    ->relationship('users','name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->required(),
             ]);
     }
 

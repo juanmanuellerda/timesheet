@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('type')->nullable();;
+            $table->string('type')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            //$table->unsignedBigInteger('task_id')->nulable();
-            //$table->foreign('task_id')->references('id')->on('task');
+
+            // $table->unsignedBigInteger('task_id')->unique()->nullable();
+            // $table->foreign('task_id')->references('id')->on('tasks')->onDelete('set null');
+            
             $table->timestamps();
         });
 

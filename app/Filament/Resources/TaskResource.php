@@ -42,7 +42,7 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('externa_id'),
+                Tables\Columns\TextColumn::make('external_id'),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('comment'),
                 Tables\Columns\TextColumn::make('date'),

@@ -17,9 +17,9 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'external_id' => fake()->name(),
-            'name' => fake()->text(),
-            'comment' => fake()->text(),
+            'external_id' => fake()->word(),
+            'name' => fake()->sentence(),
+            'comment' => fake()->text(30),
             'date' => now(), 
             'duration' => fake()->numberBetween(1,50),
             'user' => fake()-> name(),

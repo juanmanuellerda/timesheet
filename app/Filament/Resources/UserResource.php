@@ -31,12 +31,12 @@ class UserResource extends Resource
                     'guest' => 'Guest',
                     ])->required(),
                 Forms\Components\TextInput::make('password')->required(),
-                Forms\Components\Select::make('tasks')
+                Forms\Components\Select::make('task')
                     ->relationship('tasks','name')
                     ->multiple()
                     ->searchable()
-                    ->preload()
-                    ->required(),    
+                    ->preload(),
+                    //->required(),    
             ]);
     }
 

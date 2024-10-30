@@ -18,28 +18,30 @@ class DatabaseSeeder extends Seeder
         $user = new User();
 
         $user->name = 'Juan Manuel';
-        $user->email ='juanmanuellerda@gmail.com';
-        $user->type = 'guest';
+        $user->email ='admin@gmail.com';
+        $user->type = 'admin';
         $user->password = bcrypt('25692569');
-        //$user->task_id = '0';
 
         $user->save();
 
         $task = new Task();
 
+        $task->external_id = 'TecZara_01';
         $task->name = 'hacer un gestor de tareas';
         $task->comment = 'como dijo medina';
-        $task->external_id = "TecZARA_01";
         $task->date = '28/10/24'; 
         $task->duration = '35';
-        // $task->user_id = '0';
+        $task->user = 'Juan Manuel';
 
         $task->save();
-    }       
-
+    
+        User::factory(4)->create();
+        Task::factory(5)->create();
+    
         // User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+    }         
 }
 

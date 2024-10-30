@@ -22,7 +22,7 @@ return new class extends Migration
             
             $table->timestamp('date');
             $table->text('duration');       
-            
+            $table->text('user')->nulable(); 
             $table->timestamps();
         });
     }

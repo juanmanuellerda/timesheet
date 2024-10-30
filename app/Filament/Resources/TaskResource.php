@@ -23,20 +23,18 @@ class TaskResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('external_id')->maxLength(30),
                 Forms\Components\TextInput::make('name')->required()->maxLength(255),
                 Forms\Components\TextInput::make('comment')->required()->columnSpanFull('full'),
-                Forms\Components\TextInput::make('external_id')->maxLength(30),
                 Forms\Components\DatePicker::make('date')->required(),
                 Forms\Components\TextInput::make('duration')->required(),
-
-                //Forms\Components\TextInput::make('user_id')->required(),
                 
-                Forms\Components\Select::make('users')
+                Forms\Components\Select::make('user')
                     ->relationship('users','name')
                     ->multiple()
                     ->searchable()
-                    ->preload()
-                    ->required(),
+                    ->preload(),
+                    //->required(),
             ]);
     }
 
@@ -44,13 +42,12 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('task'),
+                Tables\Columns\TextColumn::make('externa_id'),
+                Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('comment'),
-                Tables\Columns\TextColumn::make('externa_id')->searchable(),
-                Tables\Columns\TextColumn::make('start_task'),
-                Tables\Columns\TextColumn::make('hours'),
-
-                Tables\Columns\TextColumn::make('user_id')->searchable(),
+                Tables\Columns\TextColumn::make('date'),
+                Tables\Columns\TextColumn::make('duration'),
+                Tables\Columns\TextColumn::make('user'),
             ])
             ->filters([
                 //

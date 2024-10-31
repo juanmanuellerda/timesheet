@@ -23,12 +23,18 @@ class TaskResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('external_id')->maxLength(30),
-                Forms\Components\TextInput::make('name')->required()->maxLength(255),
-                Forms\Components\TextInput::make('comment')->required()->columnSpanFull('full'),
-                Forms\Components\DatePicker::make('date')->required(),
-                Forms\Components\TextInput::make('duration')->required(),
-                
+                Forms\Components\TextInput::make('external_id') //campos de Tareas
+                    ->maxLength(30),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('comment')
+                    ->required()
+                    ->columnSpanFull('full'),
+                Forms\Components\DatePicker::make('date')
+                    ->required(),
+                Forms\Components\TextInput::make('duration')
+                    ->required(),
                 Forms\Components\Select::make('user')
                     ->relationship('users','name')
                     ->multiple()

@@ -53,10 +53,12 @@ class TaskResource extends Resource
                 Tables\Columns\TextColumn::make('comment'),
                 Tables\Columns\TextColumn::make('date'),
                 Tables\Columns\TextColumn::make('duration'),
-                Tables\Columns\TextColumn::make('user'),
+                Tables\Columns\TextColumn::make('users.name')
+                    ->searchable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('user')
+                    ->relationship('users','name'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -55,10 +55,13 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('type'),
+                Tables\Columns\TextColumn::make('tasks.name')
+                ->searchable(),
                 
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('task')
+                    ->relationship('tasks','name'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $user = new User();
 
-        $user->name = 'Juan Manuel';
+        $user->name = 'Administrador';
         $user->email ='admin@gmail.com';
         $user->type = 'admin';
         $user->password = bcrypt('25692569');
@@ -31,13 +31,15 @@ class DatabaseSeeder extends Seeder
         $task->comment = 'como dijo medina';
         $task->date = '28/10/24'; 
         $task->duration = '35';
-        $task->user = 'Juan Manuel';
+        $task->user = 'Administrador';
 
         $task->save();
     
         User::factory(4)->create();
         Task::factory(5)->create();
     
+        $this->call([DatabaseSeeder_user::class]);
+
         // User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

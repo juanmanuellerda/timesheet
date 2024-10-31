@@ -28,13 +28,17 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->required()
-                    ->unique(),
-                Forms\Components\Select::make('type')->options([
-                    'admin' => 'Administer',
-                    'employee' => 'Employee',
-                    'guest' => 'Guest',
+                    ->unique()
+                    ->hiddenOn('edit'),
+                Forms\Components\Select::make('type')
+                    ->options([
+                        'admin' => 'Administer',
+                        'employee' => 'Employee',
+                        'guest' => 'Guest',
                     ])->required(),
-                Forms\Components\TextInput::make('password')->required(),
+                Forms\Components\TextInput::make('password')
+                    ->required()
+                    ->hiddenOn('edit'),
                 Forms\Components\Select::make('task')
                     ->relationship('tasks','name')
                     ->multiple()

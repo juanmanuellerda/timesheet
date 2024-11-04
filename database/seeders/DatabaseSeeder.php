@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $task->external_id = 'TecZara_01';
         $task->name = 'hacer un gestor de tareas';
         $task->comment = 'como dijo medina';
+        $task->proyect = 'Proyecto 1';
         $task->date = '28/10/24'; 
         $task->duration = '35';
         $task->user = 'Administrador';

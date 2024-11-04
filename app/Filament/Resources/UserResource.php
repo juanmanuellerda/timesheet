@@ -42,8 +42,8 @@ class UserResource extends Resource
                 
                 Forms\Components\Select::make('task')        
                     ->relationship('tasks','name')
-                    // ->multiple()
-                    //->preload()
+                    ->multiple()
+                    ->preload()
                     ->hiddenOn('edit'),
  
             ]);
@@ -53,7 +53,8 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('type'),
                 // Tables\Columns\TextColumn::make('tasks.name')
@@ -66,7 +67,7 @@ class UserResource extends Resource
                     ->relationship('tasks','name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

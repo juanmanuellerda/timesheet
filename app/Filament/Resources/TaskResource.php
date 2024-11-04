@@ -28,9 +28,14 @@ class TaskResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('comment')
-                    ->required()
-                    ->columnSpanFull('full'),
+                Forms\Components\TextInput::make('proyect')
+                    ->columnSpanFull()
+                    ->required(),    
+                Forms\Components\RichEditor::make('comment')
+                    ->columnSpanFull()
+                    ->required(),   
+                Forms\Components\FileUpload::make('url')
+                    ->columnSpanFull(),
                 Forms\Components\DatePicker::make('date')
                     ->required(),
                 Forms\Components\TextInput::make('duration')
@@ -48,20 +53,34 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('external_id'),
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('comment'),
-                Tables\Columns\TextColumn::make('date'),
-                Tables\Columns\TextColumn::make('duration'),
-                Tables\Columns\TextColumn::make('users.name')
+                Tables\Columns\TextColumn::make('external_id')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('proyect')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('url')
+                    ->hidden(),   
+                Tables\Columns\TextColumn::make('comment')
+                    ->hidden(),
+
+                Tables\Columns\TextColumn::make('date')
+                    ->dateTime('d-m-Y')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('duration')
+                    ->hidden(),
+                Tables\Columns\TextColumn::make('users.name')
+                    ->hidden(),
+                    
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user')
-                    ->relationship('users','name'),
+                    ->relationship('users','name')
+                    ->label('Usuarios'),
+                    
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

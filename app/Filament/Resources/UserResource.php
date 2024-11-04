@@ -34,17 +34,18 @@ class UserResource extends Resource
                     ->options([
                         'admin' => 'Administer',
                         'employee' => 'Employee',
-                        'guest' => 'Guest',
+                        //'guest' => 'Guest',
                     ])->required(),
                 Forms\Components\TextInput::make('password')
                     ->required()
                     ->hiddenOn('edit'),
-                Forms\Components\Select::make('task')
+                
+                Forms\Components\Select::make('task')        
                     ->relationship('tasks','name')
-                    ->multiple()
-                    ->searchable()
-                    ->preload(),
-                    //->required(),    
+                    // ->multiple()
+                    //->preload()
+                    ->hiddenOn('edit'),
+ 
             ]);
     }
 
@@ -55,12 +56,13 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\TextColumn::make('tasks.name')
-                ->searchable(),
+                // Tables\Columns\TextColumn::make('tasks.name')
+                // ->searchable(),
+
                 
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('task')
+                Tables\Filters\SelectFilter::make('tasks') //no lo entiendo
                     ->relationship('tasks','name'),
             ])
             ->actions([
@@ -86,6 +88,7 @@ class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+            //'view' => Pages\ViewUser::route('/view'),
         ];
     }
 }

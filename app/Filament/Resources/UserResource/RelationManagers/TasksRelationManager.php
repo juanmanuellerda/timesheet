@@ -35,8 +35,8 @@ class TasksRelationManager extends RelationManager
 
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('user')
-                    ->relationship('users','name'),
+                // Tables\Filters\SelectFilter::make('user')
+                //     ->relationship('users','name'),
             ])
             ->headerActions([
                 //Tables\Actions\CreateAction::make(),

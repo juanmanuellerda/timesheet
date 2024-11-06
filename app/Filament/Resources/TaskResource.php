@@ -29,10 +29,10 @@ class TaskResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                // Forms\Components\Select::make('project_id')
-                //     ->relationship('projects','name')
-                //     ->searchable()
-                //     ->preload(),
+                Forms\Components\Select::make('project_id')
+                    ->relationship('project','name')
+                    ->searchable()
+                    ->preload(),
                 Forms\Components\RichEditor::make('comment')
                     ->columnSpanFull()
                     ->required(),   
@@ -68,9 +68,9 @@ class TaskResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                // Tables\Columns\TextColumn::make('project.name')
-                //     ->searchable()
-                //     ->sortable(),
+                Tables\Columns\TextColumn::make('project.name')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('file')
                     ->hidden(),   
                 Tables\Columns\TextColumn::make('comment')

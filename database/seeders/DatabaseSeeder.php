@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Project;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -29,15 +30,16 @@ class DatabaseSeeder extends Seeder
         $task->external_id = 'TecZara_01';
         $task->name = 'hacer un gestor de tareas';
         $task->comment = 'como dijo medina';
-        $task->proyect = 'Proyecto 1';
         $task->date = '28/10/24'; 
         $task->duration = '35';
         $task->user = 'Administrador';
 
         $task->save();
-    
+
+     
         User::factory(4)->create();
         Task::factory(5)->create();
+        Project::factory(3)->create();
     
         $this->call([DatabaseSeeder_user::class]);
 

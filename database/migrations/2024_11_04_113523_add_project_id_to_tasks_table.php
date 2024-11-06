@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('proyect')
-                ->after('name')
+            $table->string('project_id')
+                ->after('id')
                 ->nullable();
-            //$table->text('commentfull');
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proyect');
+        Schema::dropIfExists('project_id');
     }
 };

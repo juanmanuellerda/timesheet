@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('external_id')->nullable();
+            $table->string('external_id')
+                ->nullable();
             $table->string('name');
-            $table->text('comment')->nullable();
-            
-            // $table->unsignedBigInteger('user_id')->unique()->nullable();
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            
+            $table->text('comment')
+                ->nullable();            
             $table->timestamp('date');
             $table->text('duration');       
-            $table->text('user')->nullable(); 
+            $table->text('user')
+                ->nullable(); 
             $table->timestamps();
         });
     }

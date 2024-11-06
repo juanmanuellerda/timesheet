@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Project;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -13,7 +14,7 @@ class TaskOverview extends BaseWidget
         return [
             Stat::make('Tasks', Task::query()->count('name')),
             Stat::make('Users', User::query()->count('name')),
-            Stat::make('Proyects', Task::query()->where('proyect', '!=' , 'null')->count()),
+            Stat::make('Projects', Project::query()->where('name', '!=' , 'null')->count()),
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
 use App\Models\Task;
+use App\Models\Project;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,19 +24,27 @@ class TaskResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('external_id') //campos de Tareas
+                Forms\Components\TextInput::make('external_id') //campos del formulario de Tasks
                     ->maxLength(30),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('proyect')
-                    ->columnSpanFull()
-                    ->required(),    
+                // Forms\Components\Select::make('project_id')
+                //     ->relationship('projects','name')
+                //     ->searchable()
+                //     ->preload(),
                 Forms\Components\RichEditor::make('comment')
                     ->columnSpanFull()
                     ->required(),   
-                Forms\Components\FileUpload::make('url')
-                    ->columnSpanFull(),
+                Forms\Components\FileUpload::make('file')
+                    ->columnSpanFull()
+                    ->multiple()
+                    ->directory('file')
+                    ->visibility('public')
+                    //->storeFileNamesIn('file')
+                    ->preserveFilenames() //cuando funcine quitar
+                    ->downloadable()
+                    ->openable(),
                 Forms\Components\DatePicker::make('date')
                     ->required(),
                 Forms\Components\TextInput::make('duration')
@@ -54,19 +63,23 @@ class TaskResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('external_id')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('proyect')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('url')
+                    ->searchable()
+                    ->sortable(),
+                // Tables\Columns\TextColumn::make('project.name')
+                //     ->searchable()
+                //     ->sortable(),
+                Tables\Columns\TextColumn::make('file')
                     ->hidden(),   
                 Tables\Columns\TextColumn::make('comment')
                     ->hidden(),
-
                 Tables\Columns\TextColumn::make('date')
                     ->dateTime('d-m-Y')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+                    
                 Tables\Columns\TextColumn::make('duration')
                     ->hidden(),
                 Tables\Columns\TextColumn::make('users.name')
@@ -81,6 +94,7 @@ class TaskResource extends Resource
             ])
             ->actions([
                 //Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -102,6 +116,7 @@ class TaskResource extends Resource
             'index' => Pages\ListTasks::route('/'),
             'create' => Pages\CreateTask::route('/create'),
             'edit' => Pages\EditTask::route('/{record}/edit'),
+            // 'view' => Pages\ViewTask::route('/{record}'),
         ];
     }
 }

@@ -39,7 +39,7 @@ class TaskResource extends Resource
                 Forms\Components\FileUpload::make('file')
                     ->columnSpanFull()
                     ->multiple()
-                    ->directory('file')
+                    ->directory('attachments')
                     ->visibility('public')
                     //->storeFileNamesIn('file')
                     ->preserveFilenames() //cuando funcine quitar
@@ -53,8 +53,11 @@ class TaskResource extends Resource
                     ->relationship('users','name')
                     ->multiple()
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    //->hiddenOn('edit'),
                     //->required(),
+
+
             ]);
     }
 
@@ -71,20 +74,14 @@ class TaskResource extends Resource
                 Tables\Columns\TextColumn::make('project.name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('file')
-                    ->hidden(),   
-                Tables\Columns\TextColumn::make('comment')
-                    ->hidden(),
+                //Tables\Columns\TextColumn::make('file') 
+                //Tables\Columns\TextColumn::make('comment'),
                 Tables\Columns\TextColumn::make('date')
                     ->dateTime('d-m-Y')
                     ->searchable()
-                    ->sortable(),
-                    
-                Tables\Columns\TextColumn::make('duration')
-                    ->hidden(),
-                Tables\Columns\TextColumn::make('users.name')
-                    ->hidden(),
-                    
+                    ->sortable(),     
+                //Tables\Columns\TextColumn::make('duration'),
+                Tables\Columns\TextColumn::make('user.name'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user')
@@ -93,8 +90,8 @@ class TaskResource extends Resource
                     
             ])
             ->actions([
-                //Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -116,7 +113,7 @@ class TaskResource extends Resource
             'index' => Pages\ListTasks::route('/'),
             'create' => Pages\CreateTask::route('/create'),
             'edit' => Pages\EditTask::route('/{record}/edit'),
-            // 'view' => Pages\ViewTask::route('/{record}'),
+            //'view' => Pages\ViewTask::route('/{record}'),
         ];
     }
 }

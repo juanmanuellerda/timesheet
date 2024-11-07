@@ -22,7 +22,6 @@ class TaskFactory extends Factory
             'comment' => fake()->text(30),
             'date' => now(), 
             'duration' => fake()->numberBetween(1,50),
-            'user' => fake()-> name(),
         ];
     }
 

@@ -30,6 +30,7 @@ class DatabaseSeeder_user extends Seeder
 
         $user->save();
 
+
         $task = new Task();
 
         $task->external_id = 'TecZara_02';
@@ -37,7 +38,7 @@ class DatabaseSeeder_user extends Seeder
         $task->comment = 'como dijo medina';
         $task->date = '28/10/24'; 
         $task->duration = '35';
-        $task->user = 'Juan Manuel';
+
 
         $task->save();
     }

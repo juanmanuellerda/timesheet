@@ -32,7 +32,6 @@ class DatabaseSeeder extends Seeder
         $task->comment = 'como dijo medina';
         $task->date = '28/10/24'; 
         $task->duration = '35';
-        $task->user = 'Administrador';
 
         $task->save();
 

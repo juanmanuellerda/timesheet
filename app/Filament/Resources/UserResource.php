@@ -39,7 +39,6 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->required()
                     ->hiddenOn('edit'),
-                
                 Forms\Components\Select::make('task')        
                     ->relationship('tasks','name')
                     ->multiple()
@@ -56,17 +55,17 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('type'),
-                // Tables\Columns\TextColumn::make('tasks.name')
-                // ->searchable(),
-
-                
+                //Tables\Columns\TextColumn::make('type'),
+                Tables\Columns\TextColumn::make('tasks.name')
+                ->searchable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('tasks') //no lo entiendo
-                    ->relationship('tasks','name'),
+                // Tables\Filters\SelectFilter::make('tasks') //no lo entiendo
+                //     ->relationship('tasks','name'),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 //Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

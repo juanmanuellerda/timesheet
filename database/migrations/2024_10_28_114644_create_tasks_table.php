@@ -18,8 +18,10 @@ return new class extends Migration
             $table->string('name');
             $table->text('comment')
                 ->nullable();            
-            $table->timestamp('date');
-            $table->text('duration');       
+            $table->timestamp('date')
+                ->nullable();
+            $table->text('duration')
+                ->nullable();       
             $table->timestamps();
         });
     }

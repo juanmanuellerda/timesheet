@@ -20,8 +20,6 @@ return new class extends Migration
                 ->nullable();            
             $table->timestamp('date');
             $table->text('duration');       
-            $table->text('user')
-                ->nullable(); 
             $table->timestamps();
         });
     }

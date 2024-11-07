@@ -14,7 +14,7 @@ class TaskOverview extends BaseWidget
         return [
             Stat::make('Tasks', Task::query()->count('name')),
             Stat::make('Users', User::query()->count('name')),
-            Stat::make('Projects', Project::query()->where('name', '!=' , 'null')->count()),
+            Stat::make('Projects', Task::query()->where('project_id', '!=' , 'null')->count()),
         ];
     }
 }

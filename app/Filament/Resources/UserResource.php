@@ -41,9 +41,16 @@ class UserResource extends Resource
                     ->hiddenOn('edit'),
                 Forms\Components\Select::make('task')        
                     ->relationship('tasks','name')
+                    ->searchable()
                     ->multiple()
                     ->preload()
-                    ->hiddenOn('edit'),
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->label('new task')
+                    ]),
+                    //->hiddenOn('edit'),
  
             ]);
     }
@@ -53,11 +60,15 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email'),
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable()
+                    ->sortable(),
                 //Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\TextColumn::make('tasks.name')
-                ->searchable(),
+                    ->searchable(),
+
             ])
             ->filters([
                 // Tables\Filters\SelectFilter::make('tasks') //no lo entiendo

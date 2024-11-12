@@ -32,7 +32,20 @@ class TaskResource extends Resource
                 Forms\Components\Select::make('project_id')
                     ->relationship('project','name')
                     ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->label('new project')
+                        ])
+                    ->required(),
+                Forms\Components\Select::make('user')
+                    ->relationship('users','name')
+                    ->multiple()
+                    ->searchable()
                     ->preload(),
+                    //->hiddenOn('edit'),
                 Forms\Components\RichEditor::make('comment')
                     ->columnSpanFull()
                     ->required(),   
@@ -49,15 +62,6 @@ class TaskResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('duration')
                     ->required(),
-                Forms\Components\Select::make('user')
-                    ->relationship('users','name')
-                    ->multiple()
-                    ->searchable()
-                    ->preload()
-                    //->hiddenOn('edit'),
-                    //->required(),
-
-
             ]);
     }
 
@@ -65,13 +69,12 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('external_id')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('external_id')
+                //     ->searchable()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('project.name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
                 //Tables\Columns\TextColumn::make('file') 
@@ -81,13 +84,12 @@ class TaskResource extends Resource
                     ->searchable()
                     ->sortable(),     
                 //Tables\Columns\TextColumn::make('duration'),
-                Tables\Columns\TextColumn::make('user.name'),
+                //Tables\Columns\TextColumn::make('users.name'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user')
                     ->relationship('users','name')
-                    ->label('Usuarios'),
-                    
+                    ->label('Usuarios'),        
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -103,7 +105,7 @@ class TaskResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //RelationManagers\UserRelationManager::class,
+            RelationManagers\UserRelationManager::class,
         ];
     }
 

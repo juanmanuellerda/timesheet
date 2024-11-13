@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             $table->string('file')
-            ->after('comment')
-            ->nullable();
+                ->after('comment')
+                ->nullable();
         });
     }
 
@@ -23,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('file');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('file');
+       });
     }
 };

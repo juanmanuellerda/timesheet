@@ -10,6 +10,12 @@ class EditProject extends EditRecord
 {
     protected static string $resource = ProjectResource::class;
 
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -17,3 +23,4 @@ class EditProject extends EditRecord
         ];
     }
 }
+

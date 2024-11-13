@@ -38,19 +38,22 @@ class UserResource extends Resource
                     ])->required(),
                 Forms\Components\TextInput::make('password')
                     ->required()
+                    ->password()
+                    ->revealable()
                     ->hiddenOn('edit'),
                 Forms\Components\Select::make('task')        
                     ->relationship('tasks','name')
                     ->searchable()
                     ->multiple()
                     ->preload()
+                    ->columnSpanFull()
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
                         ->required()
                         ->maxLength(255)
                         ->label('new task')
-                    ]),
-                    //->hiddenOn('edit'),
+                    ])
+                    ->hiddenOn('edit'),
  
             ]);
     }
@@ -62,13 +65,12 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('email')
+                //     ->searchable()
+                //     ->sortable(),
                 //Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\TextColumn::make('tasks.name')
                     ->searchable(),
-
             ])
             ->filters([
                 // Tables\Filters\SelectFilter::make('tasks') //no lo entiendo

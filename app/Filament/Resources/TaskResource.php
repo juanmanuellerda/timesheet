@@ -48,9 +48,12 @@ class TaskResource extends Resource
                     ->searchable()
                     ->preload(),
                     //->hiddenOn('edit'),
+                Forms\Components\DatePicker::make('date')
+                    ->required(),
+                Forms\Components\TextInput::make('duration')
+                    ->required(),
                 Forms\Components\RichEditor::make('comment')
-                    ->columnSpanFull()
-                    ->required(),   
+                    ->columnSpanFull(),   
                 Forms\Components\FileUpload::make('file')
                     ->columnSpanFull()
                     ->multiple()
@@ -59,11 +62,8 @@ class TaskResource extends Resource
                     //->storeFileNamesIn('file')
                     ->preserveFilenames() //cuando funcine quitar
                     ->downloadable()
-                    ->openable(),
-                Forms\Components\DatePicker::make('date')
-                    ->required(),
-                Forms\Components\TextInput::make('duration')
-                    ->required(),
+                    ->openable()
+                    ->label('attachments'),
             ]);
     }
 
@@ -71,27 +71,44 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
-                // Tables\Columns\TextColumn::make('external_id')
-                //     ->searchable()
-                //     ->sortable(),
-                Tables\Columns\TextColumn::make('project.name')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('external_id')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('project.name'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
-                //Tables\Columns\TextColumn::make('file') 
-                //Tables\Columns\TextColumn::make('comment'),
+                    ->sortable()
+                    ->label('task name'),
+                Tables\Columns\TextColumn::make('comment')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Task description'),
                 Tables\Columns\TextColumn::make('date')
                     ->dateTime('d-m-Y')
                     ->searchable()
-                    ->sortable(),     
-                //Tables\Columns\TextColumn::make('duration'),
-                //Tables\Columns\TextColumn::make('users.name'),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),     
+                Tables\Columns\TextColumn::make('duration')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true), 
+                Tables\Columns\TextColumn::make('users.name')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Assigned to')
+                    ->toggleable(isToggledHiddenByDefault: true), 
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('user')
+                Tables\Filters\SelectFilter::make('users')
                     ->relationship('users','name')
-                    ->label('Usuarios'),        
+                    ->label('Usuarios'),
+                Tables\Filters\SelectFilter::make('projects')
+                    ->relationship('project','name')
+                    ->label('Proyectos'),             
             ])
             ->headerActions([
                 ExportAction::make()->exporter(TaskExporter::class)

@@ -27,7 +27,8 @@ class ProjectResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('comment')
-                ->columnSpanFull(),
+                ->columnSpanFull()
+                ->label('description'),
 
                 // Forms\Components\DatePicker::make('created_at')
                 //     ->required(),

@@ -17,7 +17,7 @@ class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-inbox-stack';
 
     public static function form(Form $form): Form
     {
@@ -26,6 +26,9 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Textarea::make('comment')
+                ->columnSpanFull(),
+
                 // Forms\Components\DatePicker::make('created_at')
                 //     ->required(),
                    

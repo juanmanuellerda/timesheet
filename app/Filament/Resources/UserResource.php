@@ -18,6 +18,11 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-users';
+    protected static ?int $navigationSort = 4;
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -64,13 +69,21 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
-                // Tables\Columns\TextColumn::make('email')
-                //     ->searchable()
-                //     ->sortable(),
-                //Tables\Columns\TextColumn::make('type'),
+                    ->sortable()
+                    ->label('User name')
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable()
+                    ->sortable()
+                    ->label('User email')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('type')
+                    ->label('User roll')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tasks.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('task assigned')
+                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->filters([
                 // Tables\Filters\SelectFilter::make('tasks') //no lo entiendo

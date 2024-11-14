@@ -17,8 +17,13 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-s-document-currency-dollar';
+    protected static ?int $navigationSort = 3;
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -36,12 +41,16 @@ class CustomerResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('projects.name')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

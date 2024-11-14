@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers;
 use App\Models\Project;
+
+
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -18,6 +20,11 @@ class ProjectResource extends Resource
     protected static ?string $model = Project::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-inbox-stack';
+    protected static ?int $navigationSort = 2;
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -26,13 +33,13 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('customer_id')
+                    ->relationship('customer','name')
+                    ->searchable()
+                    ->preload(),
                 Forms\Components\Textarea::make('comment')
-                ->columnSpanFull()
-                ->label('description'),
-
-                // Forms\Components\DatePicker::make('created_at')
-                //     ->required(),
-                   
+                    ->columnSpanFull()
+                    ->label('description'),   
             ]);
     }
 
@@ -43,6 +50,10 @@ class ProjectResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('customer.name')
+                    ->searchable()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d-m-Y')
                     ->searchable()
@@ -56,7 +67,8 @@ class ProjectResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

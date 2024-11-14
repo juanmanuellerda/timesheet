@@ -21,6 +21,11 @@ class TaskResource extends Resource
     protected static ?string $model = Task::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-wrench-screwdriver';
+    protected static ?int $navigationSort = 1;
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -78,11 +83,13 @@ class TaskResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('project.name'),
+                Tables\Columns\TextColumn::make('project.name')
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
-                    ->label('task name'),
+                    ->label('task name')
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('comment')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -108,7 +115,7 @@ class TaskResource extends Resource
                     ->label('Usuarios'),
                 Tables\Filters\SelectFilter::make('projects')
                     ->relationship('project','name')
-                    ->label('Proyectos'),             
+                    ->label('Proyectos'),              
             ])
             ->headerActions([
                 ExportAction::make()->exporter(TaskExporter::class)

@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Exports\TaskExporter;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ExportBulkAction;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
 use App\Models\Task;
@@ -11,7 +13,6 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -118,7 +119,8 @@ class TaskResource extends Resource
                     ->label('Proyectos'),              
             ])
             ->headerActions([
-                ExportAction::make()->exporter(TaskExporter::class)
+                ExportAction::make()
+                    ->exporter(TaskExporter::class)
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -128,6 +130,7 @@ class TaskResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                ExportBulkAction::make()->exporter(TaskExporter::class)
             ]);
     }
 

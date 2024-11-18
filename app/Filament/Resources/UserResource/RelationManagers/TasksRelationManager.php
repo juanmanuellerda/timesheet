@@ -18,9 +18,18 @@ class TasksRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Select::make('User')        
+                    ->relationship('users','name')
+                    ->searchable()
+                    ->multiple()
+                    ->preload()
+                    ->columnSpanFull()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->label('new task')
+                    ]),
             ]);
     }
 
@@ -35,15 +44,14 @@ class TasksRelationManager extends RelationManager
 
             ])
             ->filters([
-                // Tables\Filters\SelectFilter::make('user')
-                //     ->relationship('users','name'),
+                Tables\Filters\SelectFilter::make('user')
+                    ->relationship('users','name'),
             ])
             ->headerActions([
                 //Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                //Tables\Actions\EditAction::make(),
-                //Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

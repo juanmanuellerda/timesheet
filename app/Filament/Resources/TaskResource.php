@@ -7,15 +7,22 @@ use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ExportBulkAction;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
+use Filament\Tables\Columns\ToggleColumn;
+ 
+
+
+
 use App\Models\Task;
 use App\Models\Project;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use OpenSpout\Reader\Common\ColumnWidth;
 
 class TaskResource extends Resource
 {
@@ -36,7 +43,8 @@ class TaskResource extends Resource
                     ->maxLength(30),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpan(3), 
                 Forms\Components\Select::make('project_id')
                     ->relationship('project','name')
                     ->searchable()
@@ -47,21 +55,28 @@ class TaskResource extends Resource
                         ->maxLength(255)
                         ->label('new project')
                         ])
-                    ->required(),
-                Forms\Components\Select::make('user')
-                    ->relationship('users','name')
-                    ->multiple()
-                    ->searchable()
-                    ->preload(),
-                    //->hiddenOn('edit'),
+                    ->required()
+                    ->columnSpan(1), 
+
+                // Forms\Components\Select::make('user') //si quiero agregar usuarios desde la edición de la tarea
+                //     ->relationship('users','name')
+                //     ->multiple()
+                //     ->searchable()
+                //     ->preload(),
+                //
+
                 Forms\Components\DatePicker::make('date')
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
                 Forms\Components\TextInput::make('duration')
-                    ->required(),
+                    ->required()
+                    ->label('Duration_[h]')
+                    ->columnSpan(1),
+                Forms\Components\Toggle::make('status')
+                    ->inline(false),
                 Forms\Components\RichEditor::make('comment')
-                    ->columnSpanFull(),   
+                    ->columnSpanFull(),
                 Forms\Components\FileUpload::make('file')
-                    ->columnSpanFull()
                     ->multiple()
                     ->directory('attachments')
                     ->visibility('public')
@@ -69,8 +84,9 @@ class TaskResource extends Resource
                     ->preserveFilenames() //cuando funcine quitar
                     ->downloadable()
                     ->openable()
-                    ->label('attachments'),
-            ]);
+                    ->label('attachments')
+                    ->columnSpanFull(),
+            ])->columns(4);
     }
 
     public static function table(Table $table): Table
@@ -84,12 +100,17 @@ class TaskResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
-                Tables\Columns\TextColumn::make('project.name')
-                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
                     ->label('task name')
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\IconColumn::make('status')
+                    ->boolean()
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),       
+                Tables\Columns\TextColumn::make('project.name')
                     ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('comment')
                     ->searchable()
@@ -138,6 +159,8 @@ class TaskResource extends Resource
     {
         return [
             RelationManagers\UserRelationManager::class,
+            RelationManagers\ProjectRelationManager::class,
+            //RelationManagers\CustomerRelationManager::class, //preguntar por que esto no anda!!!!!!!!!
         ];
     }
 

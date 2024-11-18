@@ -30,21 +30,25 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columns(1),
                 Forms\Components\TextInput::make('email')
                     ->required()
                     ->unique()
+                    ->columns(1)
                     ->hiddenOn('edit'),
                 Forms\Components\Select::make('type')
                     ->options([
                         'admin' => 'Administer',
                         'employee' => 'Employee',
                         //'guest' => 'Guest',
-                    ])->required(),
+                    ])->required()
+                    ->columns(1),
                 Forms\Components\TextInput::make('password')
                     ->required()
                     ->password()
                     ->revealable()
+                    ->columns(1)
                     ->hiddenOn('edit'),
                 Forms\Components\Select::make('task')        
                     ->relationship('tasks','name')
@@ -60,7 +64,7 @@ class UserResource extends Resource
                     ])
                     ->hiddenOn('edit'),
  
-            ]);
+            ])->columns(4);
     }
 
     public static function table(Table $table): Table

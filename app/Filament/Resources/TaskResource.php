@@ -162,11 +162,9 @@ class TaskResource extends Resource
                     })
                 ],layout: FiltersLayout::Modal)
                 
-                
-
             ->headerActions([
-                ExportAction::make()
-                    ->exporter(TaskExporter::class)
+                // ExportAction::make()
+                //     ->exporter(TaskExporter::class)
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

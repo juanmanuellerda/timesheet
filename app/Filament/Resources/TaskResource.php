@@ -2,19 +2,20 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Tables\Enums\FiltersLayout;
 use App\Filament\Exports\TaskExporter;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Tables\Filters\Filter;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
 use Filament\Tables\Columns\ToggleColumn;
  
-
-
-
 use App\Models\Task;
 use App\Models\Project;
+//use DeepCopy\Filter\Filter;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
@@ -111,7 +112,8 @@ class TaskResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),       
                 Tables\Columns\TextColumn::make('project.name')
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false), 
                 Tables\Columns\TextColumn::make('comment')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -120,7 +122,7 @@ class TaskResource extends Resource
                     ->dateTime('d-m-Y')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),     
+                    ->toggleable(isToggledHiddenByDefault: false),     
                 Tables\Columns\TextColumn::make('duration')
                     ->searchable()
                     ->sortable()
@@ -132,13 +134,36 @@ class TaskResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true), 
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('users')
-                    ->relationship('users','name')
-                    ->label('Usuarios'),
+                // Tables\Filters\SelectFilter::make('users')
+                //     ->relationship('users','name')
+                //     ->label('Usuarios'),
                 Tables\Filters\SelectFilter::make('projects')
                     ->relationship('project','name')
-                    ->label('Proyectos'),              
-            ])
+                    ->label('Proyectos'),
+                
+                Filter::make('status')
+                    ->query(fn (Builder $query): Builder => $query->where('status', true)),
+                
+                Filter::make('date')
+                    ->form([
+                        DatePicker::make('created'),
+                        DatePicker::make('finished'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('date', '>=', $date),
+                            )
+                            ->when(
+                                $data['finished'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('date', '<=', $date),
+                            );
+                    })
+                ],layout: FiltersLayout::Modal)
+                
+                
+
             ->headerActions([
                 ExportAction::make()
                     ->exporter(TaskExporter::class)
@@ -174,3 +199,4 @@ class TaskResource extends Resource
         ];
     }
 }
+

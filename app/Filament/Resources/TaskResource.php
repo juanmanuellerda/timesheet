@@ -12,18 +12,18 @@ use App\Filament\Resources\TaskResource\RelationManagers;
 use Filament\Tables\Columns\ToggleColumn;
  
 use App\Models\Task;
-use App\Models\Project;
-//use DeepCopy\Filter\Filter;
+
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use OpenSpout\Reader\Common\ColumnWidth;
+
+use function Laravel\Prompts\select;
 
 class TaskResource extends Resource
 {
@@ -58,14 +58,11 @@ class TaskResource extends Resource
                         ])
                     ->required()
                     ->columnSpan(1), 
-
-                // Forms\Components\Select::make('user') //si quiero agregar usuarios desde la edición de la tarea
-                //     ->relationship('users','name')
-                //     ->multiple()
-                //     ->searchable()
-                //     ->preload(),
-                //
-
+                Forms\Components\Select::make('user') //si quiero agregar usuarios desde la edición de la tarea
+                    ->relationship('users','name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload(),
                 Forms\Components\DatePicker::make('date')
                     ->required()
                     ->columnSpan(1),
@@ -73,7 +70,7 @@ class TaskResource extends Resource
                     ->required()
                     ->label('Duration_[h]')
                     ->columnSpan(1),
-                Forms\Components\Toggle::make('status')
+                Forms\Components\Toggle::make('completed')
                     ->inline(false),
                 Forms\Components\RichEditor::make('comment')
                     ->columnSpanFull(),
@@ -110,7 +107,10 @@ class TaskResource extends Resource
                     ->boolean()
                     ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false),       
+                    ->label('completed')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->falseIcon('heroicon-o-clock')
+                    ->falseColor('warning'),
                 Tables\Columns\TextColumn::make('project.name')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false), 
@@ -134,16 +134,13 @@ class TaskResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true), 
             ])
             ->filters([
-                // Tables\Filters\SelectFilter::make('users')
-                //     ->relationship('users','name')
-                //     ->label('Usuarios'),
                 Tables\Filters\SelectFilter::make('projects')
-                    ->relationship('project','name')
-                    ->label('Proyectos'),
-                
+                    ->relationship('project','name'),
+                Tables\Filters\SelectFilter::make('customers')
+                    ->relationship('project.customer','name'),
                 Filter::make('status')
-                    ->query(fn (Builder $query): Builder => $query->where('status', true)),
-                
+                    ->query(fn (Builder $query): Builder => $query->where('status', true))
+                    ->label('completed'), 
                 Filter::make('date')
                     ->form([
                         DatePicker::make('created'),
@@ -182,7 +179,7 @@ class TaskResource extends Resource
     {
         return [
             RelationManagers\UserRelationManager::class,
-            RelationManagers\ProjectRelationManager::class,
+            //RelationManagers\ProjectRelationManager::class,
             //RelationManagers\CustomerRelationManager::class, //preguntar por que esto no anda!!!!!!!!!
         ];
     }

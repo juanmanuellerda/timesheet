@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers;
 use App\Models\Project;
-
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Enums\FiltersLayout;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -64,8 +66,16 @@ class ProjectResource extends Resource
                     ->sortable(), 
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\SelectFilter::make('customers')
+                    ->relationship('customer','name')
+                    ->searchable()
+                    ->preload(),
+                Tables\Filters\SelectFilter::make('tasks')
+                    ->relationship('tasks','name')
+                    ->searchable()
+                    ->preload(),
+                ],layout: FiltersLayout::Modal)
+                    
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),

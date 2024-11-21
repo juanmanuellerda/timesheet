@@ -75,17 +75,8 @@ class TaskResource extends Resource
                 Forms\Components\Toggle::make('status')
                     ->inline(false)
                     ->label('completed'),
-                    // ->live()
-                    // ->afterStateUpdated(function () {   
-                    //     Notification::make()
-                    //         ->title('WARNING')
-                    //         ->success()
-                    //         ->send();
-                    //         }
-                    //     ),
-                     
                 Forms\Components\DatePicker::make('date_completed')
-                    //->disabled()
+                    ->disabled()
                     ->live()
                     ->columnSpan(1),        
                 Forms\Components\Select::make('user')

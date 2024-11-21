@@ -12,7 +12,8 @@ class TaskOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Tasks', Task::query()->count('name')),
+            Stat::make('Tasks completed', Task::query()->where('status',1)->count()),
+            Stat::make('Tasks uncompleted', Task::query()->where('status',0)->count()),
             Stat::make('Users', User::query()->count('name')),
             Stat::make('Projects', Project::query()->where('id', '!=' , 'null')->count()),
         ];

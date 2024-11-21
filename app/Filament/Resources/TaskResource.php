@@ -9,10 +9,17 @@ use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Filters\Filter;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
-use Filament\Tables\Columns\ToggleColumn;
- 
-use App\Models\Task;
 
+
+
+use Filament\Resources\Actions\BulkAction;
+
+use Filament\Forms\Components\Button;
+use Illuminate\Support\Collection;
+use Filament\Notifications\Notification;
+
+
+use App\Models\Task;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
@@ -33,7 +40,7 @@ class TaskResource extends Resource
     protected static ?int $navigationSort = 1;
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getModel()::where('status',0)->count();
     }
 
     public static function form(Form $form): Form
@@ -45,7 +52,7 @@ class TaskResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255)
-                    ->columnSpan(3), 
+                    ->columnSpan(2), 
                 Forms\Components\Select::make('project_id')
                     ->relationship('project','name')
                     ->searchable()
@@ -58,20 +65,41 @@ class TaskResource extends Resource
                         ])
                     ->required()
                     ->columnSpan(1), 
-                Forms\Components\Select::make('user') //si quiero agregar usuarios desde la edición de la tarea
-                    ->relationship('users','name')
-                    ->multiple()
-                    ->searchable()
-                    ->preload(),
                 Forms\Components\DatePicker::make('date')
                     ->required()
                     ->columnSpan(1),
                 Forms\Components\TextInput::make('duration')
                     ->required()
-                    ->label('Duration_[h]')
+                    ->label('Duration [h]')
                     ->columnSpan(1),
-                Forms\Components\Toggle::make('completed')
-                    ->inline(false),
+                Forms\Components\Toggle::make('status')
+                    ->inline(false)
+                    ->label('completed'),
+                    // ->live()
+                    // ->afterStateUpdated(function () {   
+                    //     Notification::make()
+                    //         ->title('WARNING')
+                    //         ->success()
+                    //         ->send();
+                    //         }
+                    //     ),
+                     
+                Forms\Components\DatePicker::make('date_completed')
+                    //->disabled()
+                    ->live()
+                    ->columnSpan(1),        
+                Forms\Components\Select::make('user')
+                    ->relationship('users','name')
+                    ->searchable()
+                    ->multiple()
+                    ->preload()                   
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->label('new task')
+                    ])
+                    ->columnSpanFull(),
                 Forms\Components\RichEditor::make('comment')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('file')
@@ -104,13 +132,19 @@ class TaskResource extends Resource
                     ->label('task name')
                     ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\IconColumn::make('status')
-                    ->boolean()
+                    ->boolean()                   
                     ->searchable()
                     ->sortable()
                     ->label('completed')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->falseIcon('heroicon-o-clock')
                     ->falseColor('warning'),
+                    
+                Tables\Columns\TextColumn::make('date_completed')
+                    ->dateTime('d-m-Y')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true), 
                 Tables\Columns\TextColumn::make('project.name')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false), 
@@ -143,18 +177,18 @@ class TaskResource extends Resource
                     ->label('completed'), 
                 Filter::make('date')
                     ->form([
-                        DatePicker::make('created'),
-                        DatePicker::make('finished'),
+                        DatePicker::make('from'),
+                        DatePicker::make('to'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
-                                $data['created'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('date', '>=', $date),
+                                $data['from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('date_completed', '>=', $date),
                             )
                             ->when(
-                                $data['finished'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('date', '<=', $date),
+                                $data['to'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('date_completed', '<=', $date),
                             );
                     })
                 ],layout: FiltersLayout::Modal)
@@ -169,9 +203,25 @@ class TaskResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //Tables\Actions\DeleteBulkAction::make(),                         
+                Tables\Actions\BulkAction::make('task completed')
+                        ->icon('heroicon-o-clock')
+                        ->action(function ($records) {
+                            $newDate = now();  
+                            foreach ($records as $record) {
+                                $record->update([
+                                    'date_completed' => $newDate,
+                                    'status' => True,
+                                ]);
+                                }
+                            Notification::make()
+                                ->title('task completed succeed')
+                                ->success()
+                                ->send();
+                            })
+                        ->deselectRecordsAfterCompletion()                               
                 ]),
-                ExportBulkAction::make()->exporter(TaskExporter::class)
+                   ExportBulkAction::make()->exporter(TaskExporter::class)
             ]);
     }
 
@@ -194,4 +244,3 @@ class TaskResource extends Resource
         ];
     }
 }
-

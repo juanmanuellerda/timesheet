@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('task_id');
+            $table->unsignedBigInteger('task_id')
+                ->nullable();
             $table->foreign('task_id')
                 ->references('id')
                 ->on('tasks')
                 ->cascadeOnDelete();  
-            $table->string('name');
+            $table->string('name')
+                ->nullable();
+            $table->boolean('status')
+                ->default(false);
             $table->timestamp('from_date')
                 ->nullable();
             $table->timestamp('to_date')

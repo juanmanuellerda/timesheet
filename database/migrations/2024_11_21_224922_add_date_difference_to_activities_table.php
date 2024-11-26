@@ -12,19 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->boolean('status')
-            ->after('name')
-            ->default(false);
+            $table->integer('date_difference')
+                ->nullable()
+                ->after('to_date');
         });
     }
 
+  
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('date_difference');
         });
     }
 };

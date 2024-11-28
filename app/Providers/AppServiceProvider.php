@@ -4,8 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Model;
-
-
+use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,5 +22,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         model::unguard();
+        DB::listen(function ($event) {
+            info($event->toRawSql());
+        });
     }
 }

@@ -36,9 +36,9 @@ class DatabaseSeeder extends Seeder
         $task->save();
 
      
-        User::factory(4)->create();
-        Task::factory(5)->create();
-        Project::factory(3)->create();
+        // User::factory(4)->create();
+        // Task::factory(5)->create();
+        // Project::factory(3)->create();
     
         $this->call([DatabaseSeeder_user::class]);
 

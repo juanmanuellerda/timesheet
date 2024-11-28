@@ -19,15 +19,13 @@ return new class extends Migration
                 ->references('id')
                 ->on('tasks')
                 ->cascadeOnDelete();  
-            $table->string('name')
+            $table->timestamp('start_at')
                 ->nullable();
-            $table->boolean('status')
-                ->default(false);
-            $table->timestamp('from_date')
+            $table->timestamp('end_at')
                 ->nullable();
-            $table->timestamp('to_date')
+            $table->integer('duration')
                 ->nullable();
-            $table->text('comment')
+            $table->text('description')
                 ->nullable();            
             $table->timestamps();
         });

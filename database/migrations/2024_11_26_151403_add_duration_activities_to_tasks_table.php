@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->text('comment')
-                ->after('name')
-                ->nullable();
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->integer('duration_activities')
+            ->nullable()
+            ->after('date');
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->dropColumn('comment');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('duration_activities');
         });
     }
 };

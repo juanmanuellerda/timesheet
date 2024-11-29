@@ -88,7 +88,7 @@ class TaskResource extends Resource
                                     ->columnSpan(3), 
                                 Forms\Components\Select::make('user')
                                     ->relationship('users','name')
-                                    //->default([auth()->user()->id]) 
+                                    ->default([auth()->user()->id]) 
                                     ->multiple()
                                     ->preload()                   
                                     ->createOptionForm([

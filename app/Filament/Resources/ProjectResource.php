@@ -13,6 +13,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,10 +24,10 @@ class ProjectResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-inbox-stack';
     protected static ?int $navigationSort = 2;
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
+    // public static function getNavigationBadge(): ?string
+    // {
+    //     return static::getModel()::count();
+    // }
 
     public static function form(Form $form): Form
     {
@@ -41,7 +42,7 @@ class ProjectResource extends Resource
                     ->preload(),
                 Forms\Components\Textarea::make('comment')
                     ->columnSpanFull()
-                    ->label('description'),   
+                    ->label('description'),       
             ]);
     }
 
@@ -55,7 +56,6 @@ class ProjectResource extends Resource
                 Tables\Columns\TextColumn::make('customer.name')
                     ->searchable()
                     ->sortable(),
-
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d-m-Y')
                     ->searchable()
@@ -78,8 +78,7 @@ class ProjectResource extends Resource
                     
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

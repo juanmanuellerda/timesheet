@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,10 +20,10 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-document-currency-dollar';
     protected static ?int $navigationSort = 3;
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
+    // public static function getNavigationBadge(): ?string
+    // {
+    //     return static::getModel()::count();
+    // }
     
     public static function form(Form $form): Form
     {
@@ -49,9 +50,9 @@ class CustomerResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                //Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            ])
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

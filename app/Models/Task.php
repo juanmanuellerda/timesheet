@@ -14,7 +14,9 @@ class Task extends Model
 
     protected $casts = [
         'file' => 'array',
+        'start_at' => 'datetime',
     ];
+
 
     public function users(): BelongsToMany {
         return $this->belongsToMany(User::class);

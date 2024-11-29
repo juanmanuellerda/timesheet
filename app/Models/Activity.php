@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class Activity extends Model
 {
     use HasFactory;
+
+    protected $casts = ['
+        start_at' => 'datetime
+    '];
     
     public function task(): BelongsTo {
         return $this->belongsTo(Task::class);

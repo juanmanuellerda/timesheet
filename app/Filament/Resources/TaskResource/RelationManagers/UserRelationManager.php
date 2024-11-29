@@ -24,8 +24,7 @@ class UserRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->required()
-                    ->unique(),
-                    
+                    ->unique(),   
                 Forms\Components\Select::make('type')
                     ->options([
                         'admin' => 'Administer',
@@ -36,7 +35,6 @@ class UserRelationManager extends RelationManager
                     ->required()
                     ->password()
                     ->revealable(),
-                    
                 Forms\Components\Select::make('task')        
                     ->relationship('tasks','name')
                     ->searchable()

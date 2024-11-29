@@ -29,6 +29,7 @@ use Filament\Tables\Columns\Summarizers\Summarizer;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 use function Laravel\Prompts\select;
 
@@ -53,33 +54,30 @@ class ActivityResource extends Resource
                     ->preload()
                     ->createOptionForm([
                         Forms\Components\TextInput::make('external_id')
-                        ->maxLength(30),
+                            ->maxLength(30),
                         Forms\Components\TextInput::make('name')
-                        ->required()
-                        ->maxLength(255),
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('duration')
+                            ->required()
+                            ->label('Estimated [h]'),
                         Forms\Components\Select::make('project_id')
                             ->relationship('project','name')
                             ->searchable()
                             ->preload()
                             ->required(),
-                    Forms\Components\DateTimePicker::make('date')
-                        ->default(now())
-                        ->seconds(false)
-                        ->readOnly()
-                        ->Hidden(),
-                    Forms\Components\Select::make('user')
-                        ->relationship('users','name')
-                        //->default([auth()->user()->id]) 
-                        ->multiple()
-                        ->preload(),                   
+                        Forms\Components\Select::make('user')
+                            ->relationship('users','name')
+                            ->default([auth()->user()->id])
+                            ->multiple()
+                            ->preload(),  
+                        Forms\Components\DateTimePicker::make('date')
+                            ->default(now())
+                            ->seconds(false)
+                            ->readOnly(),
                     ])
                     ->required()
                     ->columnSpan(3),
-                    //->columnSpan(1), 
-                // Forms\Components\TextInput::make('name')
-                //     ->required()
-                //     ->maxLength(255)
-                //     ->hidden(),
                 Forms\Components\DateTimePicker::make('start_at')
                     ->readOnly()
                     ->seconds(false)
@@ -106,10 +104,6 @@ class ActivityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('task.name') 
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false),
-                Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),

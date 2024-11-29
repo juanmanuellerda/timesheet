@@ -2,6 +2,10 @@
 
 namespace App\Filament\Resources\TaskResource\RelationManagers;
 
+use App\Models\Activity;
+use App\Models\Task;
+
+use Filament\Tables\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -9,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityRelationManager extends RelationManager
 {
@@ -39,7 +44,7 @@ class ActivityRelationManager extends RelationManager
                             ->Hidden(),
                         Forms\Components\Select::make('user')
                             ->relationship('users','name')
-                            //->default([auth()->user()->id]) 
+                            ->default([auth()->user()->id]) 
                             ->multiple()
                             ->preload(),                   
                     ])
@@ -55,13 +60,7 @@ class ActivityRelationManager extends RelationManager
                     ->readOnly()
                     ->seconds(false)    
                     ->columnSpan(1)
-                    ->hidden(),
-                Forms\Components\TextInput::make('duration')
-                    //->label('Activity time [min]')
-                    ->readOnly()
-                    ->columnSpan(2)
-                    //->hidden()
-                    ->default(fn ($record) => $record ? $record->date_difference : null), // Usando el accesor       
+                    ->hidden(),    
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->columnSpanFull(),    
@@ -90,7 +89,11 @@ class ActivityRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    // ->action(function ($record) {
+                    //     $task_id = 3;    
+                    //     $task = Task::select('id','status')->where('id',$task_id)->update(['status' => false]);
+                    // }),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
